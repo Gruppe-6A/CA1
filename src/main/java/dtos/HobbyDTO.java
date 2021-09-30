@@ -1,5 +1,10 @@
 package dtos;
 
+import entities.HobbyEntity;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class HobbyDTO {
     private String name;
     private String category;
@@ -12,6 +17,18 @@ public class HobbyDTO {
         this.wikiLink = wikiLink;
         this.type = type;
     }
+    public HobbyDTO(HobbyEntity he){
+        this.name = he.getname();
+        this.category = he.getcategory();
+        this.wikiLink = he.getWikiLink();
+        this.type = he.getType();
+    }
+    public static List<HobbyDTO> getDtos(List<HobbyEntity> hes){
+        List<HobbyDTO> hDTO = new ArrayList();
+        hes.forEach(he->hDTO.add(new HobbyDTO(he)));
+        return hDTO;
+    }
+
 
     public String getName() {
         return name;

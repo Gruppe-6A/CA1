@@ -4,12 +4,12 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Table(name = "city_info")
+@Table(name = "cityinfo")
 @Entity
 public class CityInfoEntity {
     @Id
     @Column(name = "zipcode", nullable = false)
-    private int zipcode;
+    private String zipcode;
     private String city;
     @OneToMany(mappedBy = "cityInfo", cascade = CascadeType.PERSIST)
     private List<AddressEntity> addressEntityList;
@@ -28,17 +28,17 @@ public class CityInfoEntity {
         addressEntityList.remove(address);
     }
 
-    public CityInfoEntity(int zipcode, String city) {
+    public CityInfoEntity(String zipcode, String city) {
         this.zipcode = zipcode;
         this.city = city;
         addressEntityList = new ArrayList<>();
     }
 
-    public int getZipcode() {
+    public String getZipcode() {
         return zipcode;
     }
 
-    public void setZipcode(int zipcode) {
+    public void setZipcode(String zipcode) {
         this.zipcode = zipcode;
     }
 

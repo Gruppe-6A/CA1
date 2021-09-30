@@ -2,16 +2,24 @@ package dtos;
 
 import entities.PersonEntity;
 
-public class PersonDTO {private String firstName;
+import java.util.ArrayList;
+import java.util.List;
+
+public class PersonDTO {
+    private String firstName;
     private String lastName;
     private String phoneNumber;
     private String emailAddress;
+    private List<HobbyDTO> hobbyDTO;
+    private AddressDTO addressDTO;
 
-    public PersonDTO(String firstName, String lastName, String phoneNumber, String emailAddress) {
+    public PersonDTO(String firstName, String lastName, String phoneNumber, String emailAddress, List<HobbyDTO> hobbyDTO, AddressDTO addressDTO) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;
         this.emailAddress = emailAddress;
+        this.hobbyDTO = hobbyDTO;
+        this.addressDTO = addressDTO;
     }
 
     public PersonDTO(PersonEntity pe){
@@ -19,7 +27,30 @@ public class PersonDTO {private String firstName;
         this.lastName = pe.getLastName();
         this.phoneNumber = pe.getPhoneNumber();
         this.emailAddress = pe.getEmailAddress();
+        this.hobbyDTO = HobbyDTO.getDtos(pe.getHobby());
+        this.addressDTO = new AddressDTO(pe.getAddress());
 
+    }
+    public static List<PersonDTO> getPersonDTO(List<PersonEntity> pe){
+        List<PersonDTO> pDTO = new ArrayList();
+        pe.forEach(pes->pDTO.add(new PersonDTO(pes)));
+        return pDTO;
+    }
+
+    public List<HobbyDTO> getHobbyDTO() {
+        return hobbyDTO;
+    }
+
+    public void setHobbyDTO(List<HobbyDTO> hobbyDTO) {
+        this.hobbyDTO = hobbyDTO;
+    }
+
+    public AddressDTO getAddressDTO() {
+        return addressDTO;
+    }
+
+    public void setAddressDTO(AddressDTO addressDTO) {
+        this.addressDTO = addressDTO;
     }
 
     public String getFirstName() {

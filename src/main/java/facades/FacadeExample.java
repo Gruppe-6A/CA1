@@ -8,10 +8,13 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.TypedQuery;
 import utils.EMF_Creator;
 
+
+
 /**
  *
  * Rename Class to a relevant name Add add relevant facade methods
  */
+
 public class FacadeExample {
 
     private static FacadeExample instance;
@@ -19,6 +22,8 @@ public class FacadeExample {
     
     //Private Constructor to ensure Singleton
     private FacadeExample() {}
+
+
     
     
     /**
@@ -26,6 +31,7 @@ public class FacadeExample {
      * @param _emf
      * @return an instance of this facade class.
      */
+
     public static FacadeExample getFacadeExample(EntityManagerFactory _emf) {
         if (instance == null) {
             emf = _emf;
@@ -80,3 +86,5 @@ public class FacadeExample {
     }
 
 }
+
+

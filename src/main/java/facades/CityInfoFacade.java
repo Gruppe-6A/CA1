@@ -1,6 +1,8 @@
 package facades;
 
+import dtos.CityInfoDTO;
 import dtos.RenameMeDTO;
+import entities.CityInfoEntity;
 import entities.RenameMe;
 import utils.EMF_Creator;
 
@@ -27,7 +29,7 @@ public class CityInfoFacade {
      * @param _emf
      * @return an instance of this facade class.
      */
-    public static CityInfoFacade getFacadeExample(EntityManagerFactory _emf) {
+    public static CityInfoFacade getCityInfoFacade(EntityManagerFactory _emf) {
         if (instance == null) {
             emf = _emf;
             instance = new CityInfoFacade();
@@ -38,7 +40,15 @@ public class CityInfoFacade {
     private EntityManager getEntityManager() {
         return emf.createEntityManager();
     }
-    
+
+    public CityInfoEntity getByID(String zipcode){
+    EntityManager em =         getEntityManager();
+
+        return em.find(CityInfoEntity.class, zipcode);
+
+    }
+
+
     public RenameMeDTO create(RenameMeDTO rm){
         RenameMe rme = new RenameMe(rm.getDummyStr1(), rm.getDummyStr2());
         EntityManager em = emf.createEntityManager();
@@ -51,10 +61,7 @@ public class CityInfoFacade {
         }
         return new RenameMeDTO(rme);
     }
-    public RenameMeDTO getById(long id){
-        EntityManager em = emf.createEntityManager();
-        return new RenameMeDTO(em.find(RenameMe.class, id));
-    }
+
     
     //TODO Remove/Change this before use
     public long getRenameMeCount(){
@@ -76,7 +83,7 @@ public class CityInfoFacade {
     
     public static void main(String[] args) {
         emf = EMF_Creator.createEntityManagerFactory();
-        CityInfoFacade fe = getFacadeExample(emf);
+        CityInfoFacade fe = getCityInfoFacade(emf);
         fe.getAll().forEach(dto->System.out.println(dto));
     }
 

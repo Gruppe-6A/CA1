@@ -9,10 +9,13 @@ import entities.RenameMe;
 import java.util.ArrayList;
 import java.util.List;
 
+
+
 /**
  *
  * @author tha
  */
+
 public class RenameMeDTO {
     private long id;
     private String str1;
@@ -64,3 +67,5 @@ public class RenameMeDTO {
     
     
 }
+
+

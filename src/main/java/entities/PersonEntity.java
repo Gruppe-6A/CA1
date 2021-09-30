@@ -39,11 +39,12 @@ public class PersonEntity {
         hobbyList.remove(he);
     }
 
-    public PersonEntity(String firstName, String lastName, String phoneNumber, String emailAddress) {
+    public PersonEntity(String firstName, String lastName, String phoneNumber, String emailAddress, AddressEntity address) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;
         this.emailAddress = emailAddress;
+        this.address = address;
         hobbyList = new ArrayList<>();
     }
     public AddressEntity getAddress() {
@@ -57,6 +58,7 @@ public class PersonEntity {
             address.addPerson(this);
         }
     }
+
 
     public String getFirstName() {
         return firstName;

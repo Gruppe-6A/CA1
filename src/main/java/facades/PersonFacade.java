@@ -1,7 +1,8 @@
 package facades;
 
-import dtos.PersonDTO;
-import dtos.RenameMeDTO;
+import dtos.*;
+import entities.AddressEntity;
+import entities.CityInfoEntity;
 import entities.PersonEntity;
 import entities.RenameMe;
 import utils.EMF_Creator;
@@ -9,6 +10,7 @@ import utils.EMF_Creator;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.TypedQuery;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -19,11 +21,10 @@ public class PersonFacade {
 
     private static PersonFacade instance;
     private static EntityManagerFactory emf;
+    public static CityInfoFacade cityInfoFacade;
 
     //Private Constructor to ensure Singleton
     private PersonFacade() {}
-    
-    
     /**
      * 
      * @param _emf
@@ -31,19 +32,25 @@ public class PersonFacade {
      */
     public static PersonFacade getPersonFacade(EntityManagerFactory _emf) {
         if (instance == null) {
+             cityInfoFacade = CityInfoFacade.getCityInfoFacade(emf);
             emf = _emf;
             instance = new PersonFacade();
         }
         return instance;
     }
 
+
+
     private EntityManager getEntityManager() {
         return emf.createEntityManager();
     }
     
-    public PersonDTO create(PersonDTO p){
-        PersonEntity pe = new PersonEntity(p.getFirstName(), p.getLastName(), p.getPhoneNumber(), p.getEmailAddress());
-        EntityManager em = emf.createEntityManager();
+    public PersonDTO createPerson(PersonDTO p){
+        EntityManager em = getEntityManager();
+        CityInfoEntity ci = cityInfoFacade.getByID(p.getAddressDTO().getCityInfoDTO().getZipcode());
+        AddressEntity ae = new AddressEntity(p.getAddressDTO().getAddress(), ci);
+        PersonEntity pe = new PersonEntity(p.getFirstName(), p.getLastName(), p.getPhoneNumber(), p.getEmailAddress(), ae);
+
         try {
             em.getTransaction().begin();
             em.persist(pe);
@@ -53,9 +60,28 @@ public class PersonFacade {
         }
         return new PersonDTO(pe);
     }
-    public RenameMeDTO getByHobby(long id){
+    public List<PersonDTO> getByHobby(String name){
         EntityManager em = emf.createEntityManager();
-        return new RenameMeDTO(em.find(RenameMe.class, id));
+        try{
+            TypedQuery query = em.createQuery("Select p from HobbyEntity h JOIN h.pList p Where h.name = :name", PersonEntity.class);
+            query.setParameter("name", name);
+            List<PersonEntity> pe = query.getResultList();
+            return PersonDTO.getPersonDTO(pe);
+        } finally {
+            em.close();
+        }
+    }
+    public PersonDTO getByPhone(String phoneNumber){
+        EntityManager em = emf.createEntityManager();
+        try{
+            TypedQuery query = em.createQuery("Select p from PersonEntity p where p.phoneNumber = :phonenumber", PersonEntity.class);
+            query.setParameter("phonenumber", phoneNumber);
+            PersonEntity pe = (PersonEntity) query.getSingleResult();
+            return new PersonDTO(pe);
+        }
+        finally {
+            em.close();
+        }
     }
     
     //TODO Remove/Change this before use
@@ -79,7 +105,13 @@ public class PersonFacade {
     public static void main(String[] args) {
         emf = EMF_Creator.createEntityManagerFactory();
         PersonFacade fe = getPersonFacade(emf);
-        fe.getAll().forEach(dto->System.out.println(dto));
+        fe.getByHobby("cykling");
+
+
+        CityInfoDTO cityInfoDTO = new CityInfoDTO(cityInfoFacade.getByID("900"));
+        AddressDTO addressDTO = new AddressDTO("psykopatvej 49", cityInfoDTO);
+        fe.createPerson(new PersonDTO("betinna", "bætinna", "1-800-beate", "cphbusinessdinmor", new ArrayList<HobbyDTO>(), addressDTO));
+        System.out.println(fe.getByPhone("?dafuq").getHobbyDTO().get(0).getName());
     }
 
 }

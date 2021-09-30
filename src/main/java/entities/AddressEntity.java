@@ -14,7 +14,7 @@ public class AddressEntity {
     private String Address;
     @OneToMany(mappedBy = "address", cascade = CascadeType.PERSIST)
     private List<PersonEntity> personEntityList;
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne()
     private CityInfoEntity cityInfo;
 
 
@@ -40,6 +40,13 @@ public class AddressEntity {
         personEntityList = new ArrayList<PersonEntity>();
     }
 
+    public CityInfoEntity getCityInfo() {
+        return cityInfo;
+    }
+
+    public void setCityInfo(CityInfoEntity cityInfo) {
+        this.cityInfo = cityInfo;
+    }
 
     public String getAddress() {
         return Address;
