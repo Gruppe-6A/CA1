@@ -8,6 +8,7 @@ import utils.EMF_Creator;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
 import java.util.List;
 
@@ -42,11 +43,18 @@ public class CityInfoFacade {
     }
 
     public CityInfoEntity getByID(String zipcode){
-    EntityManager em =         getEntityManager();
+        EntityManager em = getEntityManager();
+        try{
+            TypedQuery query = em.createQuery("Select z from CityInfoEntity z where z.zipcode = :zipcode", CityInfoEntity.class);
+            query.setParameter("zipcode", zipcode);
+            return (CityInfoEntity) query.getSingleResult();
 
-        return em.find(CityInfoEntity.class, zipcode);
+        }
+        finally {
+            em.close();
 
-    }
+        }}
+
 
 
     public RenameMeDTO create(RenameMeDTO rm){

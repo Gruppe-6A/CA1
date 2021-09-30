@@ -32,7 +32,7 @@ public class PersonFacade {
      */
     public static PersonFacade getPersonFacade(EntityManagerFactory _emf) {
         if (instance == null) {
-             cityInfoFacade = CityInfoFacade.getCityInfoFacade(emf);
+            cityInfoFacade = CityInfoFacade.getCityInfoFacade(emf);
             emf = _emf;
             instance = new PersonFacade();
         }
@@ -105,10 +105,11 @@ public class PersonFacade {
     public static void main(String[] args) {
         emf = EMF_Creator.createEntityManagerFactory();
         PersonFacade fe = getPersonFacade(emf);
+        CityInfoFacade ci = CityInfoFacade.getCityInfoFacade(emf);
         fe.getByHobby("cykling");
 
 
-        CityInfoDTO cityInfoDTO = new CityInfoDTO(cityInfoFacade.getByID("900"));
+        CityInfoDTO cityInfoDTO = new CityInfoDTO(ci.getByID("900"));
         AddressDTO addressDTO = new AddressDTO("psykopatvej 49", cityInfoDTO);
         fe.createPerson(new PersonDTO("betinna", "bætinna", "1-800-beate", "cphbusinessdinmor", new ArrayList<HobbyDTO>(), addressDTO));
         System.out.println(fe.getByPhone("?dafuq").getHobbyDTO().get(0).getName());
