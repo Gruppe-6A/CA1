@@ -3,8 +3,74 @@
     <head>
         <title>Start Page</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     </head>
     <body>
-        <h1>Er det den her? :O</h1>
+        <h1>Documentation</h1>
+    <img src = "Kanban.jpg" alt = "Billede af kanban" width = "1130" height = "867">
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th scope="col">Method</th>
+                <th scope="col">URL</th>
+                <th scope="col">Request Body (JSON)</th>
+                <th scope="col">Response (JSON)</th>
+                <th scope="col">Error (e)</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <th scope="row">GET</th>
+                <td colspan = "2">/api/person/{phone}</td>
+                <td>person (1)</td>
+                <td>error (e)</td>
+            </tr>
+            <tr>
+                <th scope="row">2</th>
+                <td>Jacob</td>
+                <td>Thornton</td>
+                <td>@fat</td>
+                <td>error (e)</td>
+            </tr>
+            <tr>
+                <th scope="row">3</th>
+                <td>Larry (the Bird)</td>
+                <td>the Bird</td>
+                <td>@twitter</td>
+                <td>error (e)</td>
+            </tr>
+            <tr>
+                <th scope="row">4</th>
+                <td>url</td>
+                <td>Otto</td>
+                <td>@mdo</td>
+                <td>error (e)</td>
+            </tr>
+            </tbody>
+
+        </table>
+
+            <pre style="word-wrap: break-word; white-space: pre-wrap;">
+(1)
+{
+ "firstName": String,
+ "lastName": String,
+ "phoneNumber": String,
+ "emailAddress": String (email),
+ "hobbyDTO":[{
+     "name": String,
+     "category": String,
+     "wikiLink": String,
+     "type": String
+ }],
+ "addressDTO": {
+     "Address": String,
+     "cityInfoDTO": {
+       "zipcode": String,
+       "city": String
+     }
+ }
+}
+        </pre>
     </body>
 </html>
