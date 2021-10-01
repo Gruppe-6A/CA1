@@ -42,6 +42,10 @@ public class PersonFacadeTest {
         EntityManager em = emf.createEntityManager();
         try {
             em.getTransaction().begin();
+            em.createNamedQuery("person.deleteAllRows").executeUpdate();
+            em.createNamedQuery("address.deleteAllRows").executeUpdate();
+            em.createNamedQuery("cityinfo.deleteAllRows").executeUpdate();
+            em.createNamedQuery("HOBBY.deleteAllRows").executeUpdate();
             HobbyEntity beskæftigelse = new HobbyEntity("beskæftigende", "idk", "udendørs", "indendørs");
             CityInfoEntity camillasCityInfo = new CityInfoEntity("800", "Larsby");
             CityInfoEntity cbvci = new CityInfoEntity("820", "camillaby");
@@ -69,7 +73,11 @@ public class PersonFacadeTest {
 
     @AfterEach
     public void tearDown() {
-//        Remove any data after each test was run
+      /*  EntityManager em = emf.createEntityManager();
+        em.getTransaction().begin();
+        em.createNativeQuery("truncate table person").executeUpdate();
+
+       */
     }
 
     // TODO: Delete or change this method 
