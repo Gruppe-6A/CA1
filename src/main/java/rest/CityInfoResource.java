@@ -2,9 +2,9 @@ package rest;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import dtos.PersonDTO;
+import dtos.CityInfoDTO;
+import facades.CityInfoFacade;
 import facades.FacadeExample;
-import facades.PersonFacade;
 import utils.EMF_Creator;
 
 import javax.persistence.EntityManagerFactory;
@@ -16,12 +16,12 @@ import javax.ws.rs.core.MediaType;
 import java.util.List;
 
 //Todo Remove or change relevant parts before ACTUAL use
-@Path("person")
-public class PersonResource {
+@Path("cityinfo")
+public class CityInfoResource {
 
     private static final EntityManagerFactory EMF = EMF_Creator.createEntityManagerFactory();
        
-    private static final PersonFacade FACADE =  PersonFacade.getPersonFacade(EMF);
+    private static final CityInfoFacade FACADE =  CityInfoFacade.getCityInfoFacade(EMF);
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
             
     @GET
@@ -30,21 +30,21 @@ public class PersonResource {
         return "{\"msg\":\"Hello World\"}";
     }
 
-    @Path("phone/{phone}")
     @GET
+    @Path("zip/{zipcode}")
     @Produces("application/json")
-    public String getByPhone(@PathParam("phone") String phone) {
-        PersonDTO pdto = FACADE.getByPhone(phone);
-        return GSON.toJson(pdto);
+    public String getByZip(@PathParam("zipcode") String zipcode){
+        CityInfoDTO ci = FACADE.getDTOByID(zipcode);
+        return GSON.toJson(ci);
     }
-    @Path("hobby/{hobby}")
+
     @GET
+    @Path("all")
     @Produces("application/json")
-    public String getByHobby(@PathParam("hobby") String hobby){
-        List<PersonDTO> pdtoList = FACADE.getAllByHobby(hobby);
-        return GSON.toJson(pdtoList);
+    public String getAllZip(){
+        List<CityInfoDTO> ciL = FACADE.getAll();
+        return GSON.toJson(ciL);
     }
 
 
-    }
-
+}

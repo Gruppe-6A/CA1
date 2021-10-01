@@ -55,8 +55,9 @@ public class PersonFacadeTest {
 
             PersonEntity Camilla = new PersonEntity("krølle bølle", "ingen kvinder", "hvad skal den ellers have?", "thomas", camillasAdresse);
             PersonEntity ole = new PersonEntity("ole", "ole", "1-800-ole", "ole@ole.dk", camillasAdresse);
-            ole.addHobby(beskæftigelse);
+
             Camilla.addHobby(beskæftigelse);
+            ole.addHobby(beskæftigelse);
 
             em.persist(camillasCityInfo);
             em.persist(cbvci);
@@ -94,12 +95,16 @@ public class PersonFacadeTest {
         assertEquals("hansen", facade.createPerson(John1).getLastName());
     }
     @Test
+    public void testGetByHobby() throws Exception{
+        assertEquals(2, facade.getAllByHobby("beskæftigende").size());
+    }
+    @Test
     public void testGetHobbyCount() throws Exception{
         assertEquals(2, facade2.countByHobby("beskæftigende"));
     }
     @Test
     public void testCityInfo()throws Exception{
-        assertEquals("camillaby", facade1.getByID("820").getCity());
+        assertEquals("camillaby", facade1.getEntityByID("820").getCity());
     }
 
 

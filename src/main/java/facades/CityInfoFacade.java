@@ -43,18 +43,14 @@ public class CityInfoFacade {
         return emf.createEntityManager();
     }
 
-    public CityInfoEntity getByID(String zipcode){
+    public CityInfoEntity getEntityByID(String zipcode){
         EntityManager em = emf.createEntityManager();
-        try{
-            TypedQuery query = em.createQuery("Select z from CityInfoEntity z where z.zipcode = :zipcode", CityInfoEntity.class);
-            query.setParameter("zipcode", zipcode);
-            return (CityInfoEntity) query.getSingleResult();
-
-        }
-        finally {
-            em.close();
-
-        }}
+        return em.find(CityInfoEntity.class, zipcode);
+    }
+    public CityInfoDTO getDTOByID(String zipcode){
+        EntityManager em = emf.createEntityManager();
+        return new CityInfoDTO(em.find(CityInfoEntity.class, zipcode));
+    }
 
     public List<CityInfoDTO> getAll(){
         EntityManager em = getEntityManager();
@@ -72,7 +68,7 @@ public class CityInfoFacade {
     public static void main(String[] args) {
         emf = EMF_Creator.createEntityManagerFactory();
         CityInfoFacade fe = getCityInfoFacade(emf);
-        System.out.println(fe.getByID("800").getCity());
+        System.out.println(fe.getEntityByID("800").getCity());
     //    fe.getAll().forEach(dto->System.out.println(dto.getZipcode()));
     }
 

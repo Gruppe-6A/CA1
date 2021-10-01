@@ -48,7 +48,7 @@ public class PersonFacade {
     
     public PersonDTO createPerson(PersonDTO p){
         EntityManager em = getEntityManager();
-        CityInfoEntity ci = ci1.getByID(p.getAddressDTO().getCityInfoDTO().getZipcode());
+        CityInfoEntity ci = ci1.getEntityByID(p.getAddressDTO().getCityInfoDTO().getZipcode());
         AddressEntity ae = new AddressEntity(p.getAddressDTO().getAddress(), ci);
         PersonEntity pe = new PersonEntity(p.getFirstName(), p.getLastName(), p.getPhoneNumber(), p.getEmailAddress(), ae);
 
@@ -61,7 +61,7 @@ public class PersonFacade {
         }
         return new PersonDTO(pe);
     }
-    public List<PersonDTO> getByHobby(String name){
+    public List<PersonDTO> getAllByHobby(String name){
         EntityManager em = emf.createEntityManager();
         try{
             TypedQuery query = em.createQuery("Select p from HobbyEntity h JOIN h.pList p Where h.name = :name", PersonEntity.class);
@@ -88,14 +88,7 @@ public class PersonFacade {
     public static void main(String[] args) {
         emf = EMF_Creator.createEntityManagerFactory();
         PersonFacade fe = getPersonFacade(emf);
-        CityInfoFacade ci = CityInfoFacade.getCityInfoFacade(emf);
-        fe.getByHobby("cykling");
 
-
-        CityInfoDTO cityInfoDTO = new CityInfoDTO(ci.getByID("900"));
-        AddressDTO addressDTO = new AddressDTO("psykopatvej 49", cityInfoDTO);
-        fe.createPerson(new PersonDTO("betinna", "bætinna", "1-800-beate", "cphbusinessdinmor", new ArrayList<HobbyDTO>(), addressDTO));
-        System.out.println(fe.getByPhone("?dafuq").getHobbyDTO().get(0).getName());
     }
 
 }

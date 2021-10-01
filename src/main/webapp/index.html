@@ -6,8 +6,8 @@
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     </head>
     <body>
-        <h1>Documentation</h1>
-    <img src = "Kanban.jpg" alt = "Billede af kanban" width = "1130" height = "867">
+
+   <div style="text-align: center"><h1>Documentation</h1></div>
         <table class="table table-hover">
             <thead>
             <tr>
@@ -15,36 +15,33 @@
                 <th scope="col">URL</th>
                 <th scope="col">Request Body (JSON)</th>
                 <th scope="col">Response (JSON)</th>
-                <th scope="col">Error (e)</th>
+                <th scope="col">Error (e1)</th>
             </tr>
             </thead>
             <tbody>
             <tr>
                 <th scope="row">GET</th>
-                <td colspan = "2">/api/person/{phone}</td>
+                <td colspan = "2">/api/person/phone/{phone}</td>
                 <td>person (1)</td>
-                <td>error (e)</td>
+                <td>error (e1)</td>
             </tr>
             <tr>
-                <th scope="row">2</th>
-                <td>Jacob</td>
-                <td>Thornton</td>
-                <td>@fat</td>
-                <td>error (e)</td>
+                <th scope="row">GET</th>
+                <td colspan = "2">/api/person/hobby/{hobby}</td>
+                <td>[person, person, ..] (1)</td>
+                <td>error (e1)</td>
             </tr>
             <tr>
-                <th scope="row">3</th>
-                <td>Larry (the Bird)</td>
-                <td>the Bird</td>
-                <td>@twitter</td>
-                <td>error (e)</td>
+                <th scope="row">GET</th>
+                <td colspan = "2">/api/cityinfo/zip/{zipcode}</td>
+                <td>cityInfo (2)</td>
+                <td>error (e1)</td>
             </tr>
             <tr>
-                <th scope="row">4</th>
-                <td>url</td>
-                <td>Otto</td>
-                <td>@mdo</td>
-                <td>error (e)</td>
+                <th scope="row">GET</th>
+                <td colspan = "2">/api/cityinfo/all</td>
+                <td>[cityInfo, cityInfo, ..] (2)</td>
+                <td>error (e1)</td>
             </tr>
             </tbody>
 
@@ -71,6 +68,21 @@
      }
  }
 }
+
+(2)
+{
+  "zipcode": String,
+  "city": String
+}
+(e1)
+{
+  "code": 500,
+  "message": "Internal Server Error"
+}
         </pre>
+    <img src = "CA1-Class-Diagram.drawio.svg" alt ="tegning">
+        <div style = "text-align: center">
+
+            <img src = "Kanban.jpg" alt = "Billede af kanban" width = "1130" height = "867"></div>
     </body>
 </html>

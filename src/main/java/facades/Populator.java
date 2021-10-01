@@ -29,7 +29,7 @@ public class Populator {
 
         EntityManager em = emf.createEntityManager();
         em.getTransaction().begin();
-        CityInfoEntity sjøbbenhavnstrup = cityInfoFacade.getByID("6200");
+        CityInfoEntity sjøbbenhavnstrup = cityInfoFacade.getEntityByID("6200");
         AddressEntity address = new AddressEntity("sejvej 69420360", sjøbbenhavnstrup);
         PersonEntity lars = new PersonEntity("(:)","32","privat", "verycool@cum.cum", address);
         PersonEntity Henrik = new PersonEntity("kristine","69","?dafuq", "breve :)", address);
