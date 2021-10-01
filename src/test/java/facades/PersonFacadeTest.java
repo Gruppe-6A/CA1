@@ -1,5 +1,6 @@
 package facades;
 
+import dtos.PersonDTO;
 import entities.*;
 import org.junit.jupiter.api.*;
 import utils.EMF_Creator;
@@ -16,6 +17,7 @@ public class PersonFacadeTest {
     private static EntityManagerFactory emf;
     private static PersonFacade facade;
     private static CityInfoFacade facade1;
+    private static HobbyFacade facade2;
 
     public PersonFacadeTest() {
     }
@@ -25,6 +27,7 @@ public class PersonFacadeTest {
        emf = EMF_Creator.createEntityManagerFactoryForTest();
        facade = PersonFacade.getPersonFacade(emf);
        facade1 = CityInfoFacade.getCityInfoFacade(emf);
+       facade2 = HobbyFacade.getHobbyFacade(emf);
     }
 
     @AfterAll
@@ -45,13 +48,19 @@ public class PersonFacadeTest {
             CityInfoEntity ckb = new CityInfoEntity("1337", "gamertown");
             CityInfoEntity NicolaiBy = new CityInfoEntity("42069", "ROKKENTOWN");
             AddressEntity camillasAdresse = new AddressEntity("Skrrtvej 8199999", camillasCityInfo);
+
             PersonEntity Camilla = new PersonEntity("krølle bølle", "ingen kvinder", "hvad skal den ellers have?", "thomas", camillasAdresse);
+            PersonEntity ole = new PersonEntity("ole", "ole", "1-800-ole", "ole@ole.dk", camillasAdresse);
+            ole.addHobby(beskæftigelse);
+            Camilla.addHobby(beskæftigelse);
+
             em.persist(camillasCityInfo);
             em.persist(cbvci);
             em.persist(ckb);
             em.persist(NicolaiBy);
             em.persist(camillasAdresse);
             em.persist(Camilla);
+            em.persist(ole);
             em.getTransaction().commit();
         } finally {
             em.close();
@@ -67,7 +76,18 @@ public class PersonFacadeTest {
     @Test
     public void testAFacadeMethod() throws Exception {
         assertEquals("krølle bølle", facade.getByPhone("hvad skal den ellers have?").getFirstName());
-
+    }
+    @Test
+    public void testCreatePerson() throws Exception{
+        CityInfoEntity NicolaiBy = new CityInfoEntity("42069", "ROKKENTOWN");
+        AddressEntity johnAdresse = new AddressEntity("rema", NicolaiBy);
+        PersonEntity John = new PersonEntity("Køl", "hansen", "112", "email", johnAdresse);
+        PersonDTO John1 = new PersonDTO(John);
+        assertEquals("hansen", facade.createPerson(John1).getLastName());
+    }
+    @Test
+    public void testGetHobbyCount() throws Exception{
+        assertEquals(2, facade2.countByHobby("beskæftigende"));
     }
     @Test
     public void testCityInfo()throws Exception{

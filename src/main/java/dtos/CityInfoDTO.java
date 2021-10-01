@@ -2,6 +2,7 @@ package dtos;
 
 import entities.CityInfoEntity;
 import entities.HobbyEntity;
+import entities.PersonEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +21,11 @@ public class CityInfoDTO {
         this.city = ce.getCity();
     }
 
+    public static List<CityInfoDTO> getCityInfoDTO(List<CityInfoEntity> ci){
+        List<CityInfoDTO> ciDTO = new ArrayList();
+        ci.forEach(cil->ciDTO.add(new CityInfoDTO(cil)));
+        return ciDTO;
+    }
 
     public String getZipcode() {
         return zipcode;

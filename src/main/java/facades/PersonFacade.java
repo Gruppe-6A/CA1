@@ -21,7 +21,7 @@ public class PersonFacade {
 
     private static PersonFacade instance;
     private static EntityManagerFactory emf;
-    public static CityInfoFacade cityInfoFacade;
+    private static CityInfoFacade ci1;
 
     //Private Constructor to ensure Singleton
     private PersonFacade() {}
@@ -32,12 +32,13 @@ public class PersonFacade {
      */
     public static PersonFacade getPersonFacade(EntityManagerFactory _emf) {
         if (instance == null) {
-            cityInfoFacade = CityInfoFacade.getCityInfoFacade(emf);
             emf = _emf;
+            ci1 = CityInfoFacade.getCityInfoFacade(emf);
             instance = new PersonFacade();
         }
         return instance;
     }
+
 
 
 
@@ -47,7 +48,7 @@ public class PersonFacade {
     
     public PersonDTO createPerson(PersonDTO p){
         EntityManager em = getEntityManager();
-        CityInfoEntity ci = cityInfoFacade.getByID(p.getAddressDTO().getCityInfoDTO().getZipcode());
+        CityInfoEntity ci = ci1.getByID(p.getAddressDTO().getCityInfoDTO().getZipcode());
         AddressEntity ae = new AddressEntity(p.getAddressDTO().getAddress(), ci);
         PersonEntity pe = new PersonEntity(p.getFirstName(), p.getLastName(), p.getPhoneNumber(), p.getEmailAddress(), ae);
 
@@ -83,7 +84,9 @@ public class PersonFacade {
             em.close();
         }
     }
-    
+
+
+
     //TODO Remove/Change this before use
     public long getRenameMeCount(){
         EntityManager em = emf.createEntityManager();

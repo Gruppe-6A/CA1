@@ -1,5 +1,6 @@
 package entities;
 
+import facades.CityInfoFacade;
 import org.eclipse.persistence.jpa.config.Cascade;
 
 import javax.persistence.*;

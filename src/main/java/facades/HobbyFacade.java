@@ -1,6 +1,7 @@
 package facades;
 
 import dtos.RenameMeDTO;
+import entities.HobbyEntity;
 import entities.RenameMe;
 import utils.EMF_Creator;
 
@@ -27,7 +28,7 @@ public class HobbyFacade {
      * @param _emf
      * @return an instance of this facade class.
      */
-    public static HobbyFacade getFacadeExample(EntityManagerFactory _emf) {
+    public static HobbyFacade getHobbyFacade(EntityManagerFactory _emf) {
         if (instance == null) {
             emf = _emf;
             instance = new HobbyFacade();
@@ -38,46 +39,24 @@ public class HobbyFacade {
     private EntityManager getEntityManager() {
         return emf.createEntityManager();
     }
-    
-    public RenameMeDTO create(RenameMeDTO rm){
-        RenameMe rme = new RenameMe(rm.getDummyStr1(), rm.getDummyStr2());
-        EntityManager em = emf.createEntityManager();
-        try {
-            em.getTransaction().begin();
-            em.persist(rme);
-            em.getTransaction().commit();
-        } finally {
-            em.close();
-        }
-        return new RenameMeDTO(rme);
-    }
-    public RenameMeDTO getById(long id){
-        EntityManager em = emf.createEntityManager();
-        return new RenameMeDTO(em.find(RenameMe.class, id));
-    }
-    
-    //TODO Remove/Change this before use
-    public long getRenameMeCount(){
-        EntityManager em = emf.createEntityManager();
+
+    public long countByHobby(String hobby){
+        EntityManager em = getEntityManager();
         try{
-            long renameMeCount = (long)em.createQuery("SELECT COUNT(r) FROM RenameMe r").getSingleResult();
-            return renameMeCount;
-        }finally{  
+            TypedQuery PersonCount = em.createQuery("SELECT COUNT(p) from HobbyEntity h JOIN h.pList p where h.name = :name ", HobbyEntity.class);
+            PersonCount.setParameter("name", hobby);
+            return (long)PersonCount.getSingleResult();
+        }
+        finally {
             em.close();
         }
     }
-    
-    public List<RenameMeDTO> getAll(){
-        EntityManager em = emf.createEntityManager();
-        TypedQuery<RenameMe> query = em.createQuery("SELECT r FROM RenameMe r", RenameMe.class);
-        List<RenameMe> rms = query.getResultList();
-        return RenameMeDTO.getDtos(rms);
-    }
+
     
     public static void main(String[] args) {
         emf = EMF_Creator.createEntityManagerFactory();
-        HobbyFacade fe = getFacadeExample(emf);
-        fe.getAll().forEach(dto->System.out.println(dto));
+        HobbyFacade fe = getHobbyFacade(emf);
+
     }
 
 }
