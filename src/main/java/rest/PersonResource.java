@@ -3,15 +3,13 @@ package rest;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import dtos.PersonDTO;
+import errorhandling.InvalidInputException;
 import facades.FacadeExample;
 import facades.PersonFacade;
 import utils.EMF_Creator;
 
 import javax.persistence.EntityManagerFactory;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 
@@ -44,7 +42,45 @@ public class PersonResource {
         List<PersonDTO> pdtoList = FACADE.getAllByHobby(hobby);
         return GSON.toJson(pdtoList);
     }
+    @Path("all")
+    @GET
+    @Produces("application/json")
+    public String getAll(){
+        List<PersonDTO> pdtoList = FACADE.getAll();
+        return GSON.toJson(pdtoList);
+    }
 
+
+    @POST
+    @Consumes("application/json")
+    @Produces("application/json")
+    public String createPerson(String person) throws InvalidInputException{
+        PersonDTO pdto = GSON.fromJson(person, PersonDTO.class);
+         PersonDTO newpdto = FACADE.createPerson(pdto);
+
+
+
+
+
+        return GSON.toJson(newpdto);
+    }
+    @Path("edit/{id}")
+    @PUT
+    @Consumes("application/json")
+    @Produces("application/json")
+    public String editPerson(@PathParam("id")int id, String person){
+      PersonDTO dto =  GSON.fromJson(person, PersonDTO.class);
+        dto.setID(id);
+        return GSON.toJson(FACADE.editPerson(dto));
+    }
+    @Path("delete/{id}")
+    @DELETE
+    @Consumes("application/json")
+    public String deletePerson(@PathParam("id") int id, String person){
+
+       FACADE.deletePerson(id);
+       return GSON.toJson("person with id: " + id + " has now been deleted.");
+    }
 
     }
 

@@ -1,15 +1,14 @@
 package facades;
 
 import dtos.*;
-import entities.AddressEntity;
-import entities.CityInfoEntity;
-import entities.PersonEntity;
-import entities.RenameMe;
+import entities.*;
+import errorhandling.InvalidInputException;
 import utils.EMF_Creator;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.TypedQuery;
+import javax.ws.rs.WebApplicationException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +21,7 @@ public class PersonFacade {
     private static PersonFacade instance;
     private static EntityManagerFactory emf;
     private static CityInfoFacade ci1;
+    private static HobbyFacade hobbyFacade;
 
     //Private Constructor to ensure Singleton
     private PersonFacade() {}
@@ -34,6 +34,7 @@ public class PersonFacade {
         if (instance == null) {
             emf = _emf;
             ci1 = CityInfoFacade.getCityInfoFacade(emf);
+            hobbyFacade = HobbyFacade.getHobbyFacade(emf);
             instance = new PersonFacade();
         }
         return instance;
@@ -46,16 +47,32 @@ public class PersonFacade {
         return emf.createEntityManager();
     }
     
-    public PersonDTO createPerson(PersonDTO p){
+    public PersonDTO createPerson(PersonDTO p) throws InvalidInputException {
         EntityManager em = getEntityManager();
         CityInfoEntity ci = ci1.getEntityByID(p.getAddressDTO().getCityInfoDTO().getZipcode());
         AddressEntity ae = new AddressEntity(p.getAddressDTO().getAddress(), ci);
         PersonEntity pe = new PersonEntity(p.getFirstName(), p.getLastName(), p.getPhoneNumber(), p.getEmailAddress(), ae);
 
+
+       // p.getHobbyDTO().forEach(hobby -> pe.addHobby(hobbyFacade.getHobbyByName(hobby.getName()));
         try {
+            if (!p.getEmailAddress().contains("@")){
+            throw new InvalidInputException("invalid email address");
+        }
             em.getTransaction().begin();
+
             em.persist(pe);
+            for (HobbyDTO dto : p.getHobbyDTO()) {
+                pe.addHobby(hobbyFacade.getHobbyByName(dto.getName()));
+                em.merge(pe);
+            }
+            em.merge(pe);
             em.getTransaction().commit();
+        }
+
+            catch (InvalidInputException l){
+            throw new WebApplicationException(l.getMessage(), 404);
+
         } finally {
             em.close();
         }
@@ -84,6 +101,52 @@ public class PersonFacade {
             em.close();
         }
     }
+    public List<PersonDTO> getAll(){
+        EntityManager em = getEntityManager();
+        try{
+            TypedQuery query = em.createQuery("Select p from PersonEntity p", PersonEntity.class);
+            List<PersonEntity> pe = query.getResultList();
+            return PersonDTO.getPersonDTO(pe);
+        } finally{
+            em.close();
+        }
+    }
+    public PersonDTO editPerson(PersonDTO p){
+        EntityManager em = getEntityManager();
+        try {
+            em.getTransaction().begin();
+            PersonEntity person = em.find(PersonEntity.class, p.getID());
+            person.setFirstName(p.getFirstName());
+            person.setLastName(p.getLastName());
+            person.setEmailAddress(p.getEmailAddress());
+            person.setPhoneNumber(p.getPhoneNumber());
+            /*person.getAddress().getCityInfo().setZipcode(p.getAddressDTO().getCityInfoDTO().getZipcode());
+            person.getAddress().setAddress(p.getAddressDTO().getAddress());
+            person.getAddress().getCityInfo().setCity(p.getAddressDTO().getCityInfoDTO().getCity());
+
+             */
+            CityInfoEntity ci = ci1.getEntityByID(p.getAddressDTO().getCityInfoDTO().getZipcode());
+            person.setAddress(new AddressEntity(p.getAddressDTO().getAddress(), ci));
+            em.getTransaction().commit();
+            return new PersonDTO(person);
+        } finally{
+            em.close();
+        }
+    }
+    public void deletePerson(int id){
+        EntityManager em = getEntityManager();
+        try{
+            em.getTransaction().begin();
+            TypedQuery query = em.createQuery("DELETE from PersonEntity p where p.id = :id", PersonEntity.class);
+            query.setParameter("id", id);
+            query.executeUpdate();
+            em.getTransaction().commit();
+        } finally{
+            em.close();
+        }
+
+    }
+
     
     public static void main(String[] args) {
         emf = EMF_Creator.createEntityManagerFactory();

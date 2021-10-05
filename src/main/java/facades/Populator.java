@@ -34,7 +34,7 @@ public class Populator {
         PersonEntity lars = new PersonEntity("(:)","32","privat", "verycool@cum.cum", address);
         PersonEntity Henrik = new PersonEntity("kristine","69","?dafuq", "breve :)", address);
         lars.setAddress(address);
-        HobbyEntity cykelmand = new HobbyEntity("cykling", "sport", "https://en.wikipedia.org/wiki/cycling", "cykler! :)");
+        HobbyEntity cykelmand = new HobbyEntity("!", "sport", "https://en.wikipedia.org/wiki/cycling", "cykler! :)");
         Henrik.setAddress(address);
         Henrik.addHobby(cykelmand);
         lars.addHobby(cykelmand);

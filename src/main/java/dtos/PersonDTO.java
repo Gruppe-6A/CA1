@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PersonDTO {
+    private int ID;
     private String firstName;
     private String lastName;
     private String phoneNumber;
@@ -83,5 +84,13 @@ public class PersonDTO {
 
     public void setEmailAddress(String emailAddress) {
         this.emailAddress = emailAddress;
+    }
+
+    public int getID() {
+        return ID;
+    }
+
+    public void setID(int ID) {
+        this.ID = ID;
     }
 }

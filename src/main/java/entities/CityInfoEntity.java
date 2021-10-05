@@ -12,7 +12,7 @@ public class CityInfoEntity {
     @Column(name = "zipcode", nullable = false)
     private String zipcode;
     private String city;
-    @OneToMany(mappedBy = "cityInfo", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "cityInfo")
     private List<AddressEntity> addressEntityList;
 
 

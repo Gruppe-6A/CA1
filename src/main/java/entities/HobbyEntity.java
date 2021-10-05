@@ -9,9 +9,7 @@ import java.util.List;
 @NamedQuery(name = "HOBBY.deleteAllRows", query = "DELETE from HobbyEntity ")
 public class HobbyEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    private Integer id;
+    @Column(name = "name", nullable = false)
     private String name;
     private String category;
     private String wikiLink;
@@ -71,13 +69,5 @@ public class HobbyEntity {
 
     public void setcategory(String category) {
         category = category;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 }

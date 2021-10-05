@@ -47,6 +47,7 @@ public class CityInfoFacade {
         EntityManager em = emf.createEntityManager();
         return em.find(CityInfoEntity.class, zipcode);
     }
+
     public CityInfoDTO getDTOByID(String zipcode){
         EntityManager em = emf.createEntityManager();
         return new CityInfoDTO(em.find(CityInfoEntity.class, zipcode));

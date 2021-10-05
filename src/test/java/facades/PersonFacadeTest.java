@@ -107,5 +107,14 @@ public class PersonFacadeTest {
         assertEquals("camillaby", facade1.getEntityByID("820").getCity());
     }
 
+    @Test
+    public void testHobbyFinder() throws Exception{
+        assertEquals("idk", facade2.getHobbyByName("beskæftigende").getcategory());
+    }
+    @Test
+    public void testDelete() throws Exception{
+        facade.deletePerson(2);
+        assertEquals(1, facade.getAll().size());
+    }
 
 }

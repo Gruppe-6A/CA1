@@ -1,7 +1,9 @@
 package facades;
 
+import dtos.HobbyDTO;
 import dtos.RenameMeDTO;
 import entities.HobbyEntity;
+import entities.PersonEntity;
 import entities.RenameMe;
 import utils.EMF_Creator;
 
@@ -51,6 +53,38 @@ public class HobbyFacade {
             em.close();
         }
     }
+   public HobbyEntity getHobbyByName(String name){
+        EntityManager em = getEntityManager();
+        try{
+            TypedQuery query = em.createQuery("select h from HobbyEntity h where h.name = :name", HobbyEntity.class);
+            query.setParameter("name", name);
+            HobbyEntity he = (HobbyEntity) query.getSingleResult();
+            return he;
+        } finally {
+            em.close();
+        }
+    }
+
+
+   /* public void giveHobby(String name, String phoneNumber) {
+        EntityManager em = getEntityManager();
+        try {
+
+            TypedQuery query = em.createQuery("Select h from HobbyEntity h where h.name = :name", HobbyEntity.class);
+            query.setParameter("name", name);
+            HobbyEntity he = (HobbyEntity) query.getSingleResult();
+            TypedQuery query1 = em.createQuery("Select p from PersonEntity p where p.phoneNumber = :phoneNumber", PersonEntity.class);
+            query1.setParameter("phoneNumber", phoneNumber);
+            PersonEntity pe =
+        }
+        finally {
+            em.close();
+        }
+    }
+
+    */
+
+
 
     
     public static void main(String[] args) {

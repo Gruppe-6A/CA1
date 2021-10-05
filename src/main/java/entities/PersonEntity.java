@@ -21,7 +21,7 @@ public class PersonEntity {
     private String emailAddress;
     @ManyToOne(cascade = CascadeType.PERSIST)
     private AddressEntity address;
-    @ManyToMany(mappedBy = "pList", cascade = CascadeType.PERSIST)
+    @ManyToMany(mappedBy = "pList", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<HobbyEntity> hobbyList;
 
     public PersonEntity() {
@@ -39,6 +39,15 @@ public class PersonEntity {
     }
     public void removeHobby(HobbyEntity he){
         hobbyList.remove(he);
+    }
+
+    public PersonEntity(String firstName, String lastName, String phoneNumber, String emailAddress, List<HobbyEntity> hList, AddressEntity address) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phoneNumber = phoneNumber;
+        this.emailAddress = emailAddress;
+        this.address = address;
+        this.hobbyList = hList;
     }
 
     public PersonEntity(String firstName, String lastName, String phoneNumber, String emailAddress, AddressEntity address) {
