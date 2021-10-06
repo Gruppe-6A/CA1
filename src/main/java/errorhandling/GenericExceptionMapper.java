@@ -30,7 +30,7 @@ public class GenericExceptionMapper implements ExceptionMapper<Throwable>  {
 
     @Override
     public Response toResponse(Throwable ex) {
-        Logger.getLogger(GenericExceptionMapper.class.getName()).log(Level.SEVERE, null, ex);
+        Logger.getLogger(GenericExceptionMapper.class.getName()).log(Level.SEVERE, "det virker ik :( ", ex);
         Response.StatusType type = getStatusType(ex);
         ExceptionDTO err;
         if (ex instanceof WebApplicationException) {

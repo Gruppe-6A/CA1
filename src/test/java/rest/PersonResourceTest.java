@@ -1,6 +1,7 @@
 package rest;
 
-import entities.RenameMe;
+import com.sun.xml.internal.fastinfoset.util.StringArray;
+import entities.*;
 import io.restassured.RestAssured;
 import io.restassured.parsing.Parser;
 import org.glassfish.grizzly.http.server.HttpServer;
@@ -16,9 +17,11 @@ import utils.EMF_Creator;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.ws.rs.core.UriBuilder;
+import java.lang.reflect.Array;
 import java.net.URI;
 
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.Matchers.equalTo;
 //Uncomment the line below, to temporarily disable this test
 //@Disabled
@@ -27,7 +30,7 @@ public class PersonResourceTest {
 
     private static final int SERVER_PORT = 7777;
     private static final String SERVER_URL = "http://localhost/api";
-    private static RenameMe r1, r2;
+
 
     static final URI BASE_URI = UriBuilder.fromUri(SERVER_URL).port(SERVER_PORT).build();
     private static HttpServer httpServer;
@@ -65,13 +68,32 @@ public class PersonResourceTest {
     @BeforeEach
     public void setUp() {
         EntityManager em = emf.createEntityManager();
-        r1 = new RenameMe("Some txt", "More text");
-        r2 = new RenameMe("aaa", "bbb");
         try {
             em.getTransaction().begin();
-            em.createNamedQuery("RenameMe.deleteAllRows").executeUpdate();
-            em.persist(r1);
-            em.persist(r2);
+            em.createNamedQuery("person.deleteAllRows").executeUpdate();
+            em.createNamedQuery("address.deleteAllRows").executeUpdate();
+            em.createNamedQuery("cityinfo.deleteAllRows").executeUpdate();
+            em.createNamedQuery("HOBBY.deleteAllRows").executeUpdate();
+            HobbyEntity beskæftigelse = new HobbyEntity("beskæftigende", "idk", "udendørs", "indendørs");
+            CityInfoEntity camillasCityInfo = new CityInfoEntity("800", "Larsby");
+            CityInfoEntity cbvci = new CityInfoEntity("820", "camillaby");
+            CityInfoEntity ckb = new CityInfoEntity("1337", "gamertown");
+            CityInfoEntity NicolaiBy = new CityInfoEntity("42069", "ROKKENTOWN");
+            AddressEntity camillasAdresse = new AddressEntity("Skrrtvej 8199999", camillasCityInfo);
+
+            PersonEntity Camilla = new PersonEntity("krølle bølle", "ingen kvinder", "hvad skal den ellers have?", "thomas", camillasAdresse);
+            PersonEntity ole = new PersonEntity("ole", "ole", "1-800-ole", "ole@ole.dk", camillasAdresse);
+
+            Camilla.addHobby(beskæftigelse);
+            ole.addHobby(beskæftigelse);
+
+            em.persist(camillasCityInfo);
+            em.persist(cbvci);
+            em.persist(ckb);
+            em.persist(NicolaiBy);
+            em.persist(camillasAdresse);
+            em.persist(Camilla);
+            em.persist(ole);
             em.getTransaction().commit();
         } finally {
             em.close();
@@ -86,22 +108,39 @@ public class PersonResourceTest {
 
     //This test assumes the database contains two rows
     @Test
-    public void testDummyMsg() throws Exception {
+    public void testGetAll() throws Exception {
+        String[] sk  = new String[2];
+        sk[0] = "ole";
+        sk[1] = "krølle bølle";
         given()
                 .contentType("application/json")
-                .get("/xxx/").then()
+                .get("/person/all").then()
                 .assertThat()
                 .statusCode(HttpStatus.OK_200.getStatusCode())
-                .body("msg", equalTo("Hello World"));
+                .body("firstName", hasItems("ole", "krølle bølle"));
     }
 
     @Test
-    public void testCount() throws Exception {
+    public void testGetByPhone() throws Exception {
         given()
                 .contentType("application/json")
-                .get("/xxx/count").then()
+                .pathParam("phone", "1-800-ole").when()
+                .get("/person/phone/{phone}").then()
                 .assertThat()
                 .statusCode(HttpStatus.OK_200.getStatusCode())
-                .body("count", equalTo(2));
+                .body("lastName", equalTo("ole"));
+    }
+    @Test
+    public void testGetAllByHobby() throws Exception {
+        String[] sk  = new String[2];
+        sk[0] = "ole";
+        sk[1] = "krølle bølle";
+        given()
+                .contentType("application/json")
+                .pathParam("hobby", "beskæftigende").when()
+                .get("/person/hobby/{hobby}").then()
+                .assertThat()
+                .statusCode(HttpStatus.OK_200.getStatusCode())
+                .body("firstName", hasItems("ole", "krølle bølle"));
     }
 }

@@ -90,7 +90,7 @@ public class PersonFacadeTest {
     public void testCreatePerson() throws Exception{
         CityInfoEntity NicolaiBy = new CityInfoEntity("42069", "ROKKENTOWN");
         AddressEntity johnAdresse = new AddressEntity("rema", NicolaiBy);
-        PersonEntity John = new PersonEntity("Køl", "hansen", "112", "email", johnAdresse);
+        PersonEntity John = new PersonEntity("Køl", "hansen", "112", "email@", johnAdresse);
         PersonDTO John1 = new PersonDTO(John);
         assertEquals("hansen", facade.createPerson(John1).getLastName());
     }
@@ -106,6 +106,11 @@ public class PersonFacadeTest {
     public void testCityInfo()throws Exception{
         assertEquals("camillaby", facade1.getEntityByID("820").getCity());
     }
+    @Test
+    public void getAllTest()throws Exception{
+        assertEquals(2, facade.getAll().size());
+    }
+
 
     @Test
     public void testHobbyFinder() throws Exception{

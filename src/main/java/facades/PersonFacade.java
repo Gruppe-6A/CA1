@@ -101,8 +101,9 @@ public class PersonFacade {
             em.close();
         }
     }
+
     public List<PersonDTO> getAll(){
-        EntityManager em = getEntityManager();
+        EntityManager em = emf.createEntityManager();
         try{
             TypedQuery query = em.createQuery("Select p from PersonEntity p", PersonEntity.class);
             List<PersonEntity> pe = query.getResultList();
