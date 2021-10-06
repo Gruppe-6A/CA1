@@ -87,6 +87,11 @@ public class PersonFacadeTest {
         assertEquals("krølle bølle", facade.getByPhone("hvad skal den ellers have?").getFirstName());
     }
     @Test
+    public void testDelete() throws Exception{
+        facade.deletePerson(2);
+        assertEquals(1, facade.getAll().size());
+    }
+    @Test
     public void testCreatePerson() throws Exception{
         CityInfoEntity NicolaiBy = new CityInfoEntity("42069", "ROKKENTOWN");
         AddressEntity johnAdresse = new AddressEntity("rema", NicolaiBy);
@@ -116,10 +121,6 @@ public class PersonFacadeTest {
     public void testHobbyFinder() throws Exception{
         assertEquals("idk", facade2.getHobbyByName("beskæftigende").getcategory());
     }
-    @Test
-    public void testDelete() throws Exception{
-        facade.deletePerson(2);
-        assertEquals(1, facade.getAll().size());
-    }
+
 
 }
