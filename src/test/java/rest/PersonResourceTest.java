@@ -165,7 +165,7 @@ public class PersonResourceTest {
         PersonDTO Jake = new PersonDTO(John);
         given().
                 contentType("application/json").
-                pathParam("id", 2).
+                pathParam("id", 11).
                 body(Jake)
                 .when()
                 .request("put", "/person/edit/{id}").then()
