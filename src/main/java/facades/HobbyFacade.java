@@ -9,6 +9,7 @@ import utils.EMF_Creator;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 import java.util.List;
 
@@ -56,35 +57,36 @@ public class HobbyFacade {
    public HobbyEntity getHobbyByName(String name){
         EntityManager em = getEntityManager();
         try{
+
             TypedQuery query = em.createQuery("select h from HobbyEntity h where h.name = :name", HobbyEntity.class);
             query.setParameter("name", name);
+            System.out.println(query.getSingleResult());
             HobbyEntity he = (HobbyEntity) query.getSingleResult();
             return he;
+        } catch (NoResultException nre){
+            return null;
+       } finally
+        {
+            em.close();
+        }
+    }
+
+   public HobbyEntity getOrCreateHobby(HobbyDTO hdto){
+        EntityManager em = getEntityManager();
+        try{
+            HobbyEntity hEntity = getHobbyByName(hdto.getName());
+            if (hEntity == null){
+                HobbyEntity nyHobby = new HobbyEntity(hdto.getName(),hdto.getCategory(), hdto.getWikiLink(), hdto.getType());
+                em.getTransaction().begin();
+                em.persist(nyHobby);
+                hEntity = nyHobby;
+            }
+            return hEntity;
         } finally {
             em.close();
         }
+
     }
-
-
-   /* public void giveHobby(String name, String phoneNumber) {
-        EntityManager em = getEntityManager();
-        try {
-
-            TypedQuery query = em.createQuery("Select h from HobbyEntity h where h.name = :name", HobbyEntity.class);
-            query.setParameter("name", name);
-            HobbyEntity he = (HobbyEntity) query.getSingleResult();
-            TypedQuery query1 = em.createQuery("Select p from PersonEntity p where p.phoneNumber = :phoneNumber", PersonEntity.class);
-            query1.setParameter("phoneNumber", phoneNumber);
-            PersonEntity pe =
-        }
-        finally {
-            em.close();
-        }
-    }
-
-    */
-
-
 
     
     public static void main(String[] args) {

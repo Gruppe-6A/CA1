@@ -30,8 +30,10 @@ public class PersonEntity {
     public List <HobbyEntity> getHobby(){
         return hobbyList;
     }
+
     public void addHobby(HobbyEntity he){
             hobbyList.add(he);
+
         if(!he.getpList().contains(this)){
             he.getpList().add(this);
         }

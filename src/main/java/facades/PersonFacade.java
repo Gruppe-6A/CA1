@@ -63,7 +63,8 @@ public class PersonFacade {
 
             em.persist(pe);
             for (HobbyDTO dto : p.getHobbyDTO()) {
-                pe.addHobby(hobbyFacade.getHobbyByName(dto.getName()));
+
+                pe.addHobby(hobbyFacade.getOrCreateHobby(dto));
                 em.merge(pe);
             }
             em.merge(pe);

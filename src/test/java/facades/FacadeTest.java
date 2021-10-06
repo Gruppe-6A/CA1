@@ -13,14 +13,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 //Uncomment the line below, to temporarily disable this test
 //@Disabled
-public class PersonFacadeTest {
+public class FacadeTest {
 
     private static EntityManagerFactory emf;
     private static PersonFacade facade;
     private static CityInfoFacade facade1;
     private static HobbyFacade facade2;
 
-    public PersonFacadeTest() {
+    public FacadeTest() {
     }
 
     @BeforeAll

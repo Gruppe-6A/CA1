@@ -1,6 +1,8 @@
 package rest;
 
+import dtos.PersonDTO;
 import entities.*;
+import facades.PersonFacade;
 import io.restassured.RestAssured;
 import io.restassured.parsing.Parser;
 import org.glassfish.grizzly.http.server.HttpServer;
@@ -20,6 +22,7 @@ import java.lang.reflect.Array;
 import java.net.URI;
 
 import static io.restassured.RestAssured.given;
+import static io.restassured.RestAssured.with;
 import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.Matchers.equalTo;
 //Uncomment the line below, to temporarily disable this test
@@ -39,7 +42,6 @@ public class PersonResourceTest {
         ResourceConfig rc = ResourceConfig.forApplication(new ApplicationConfig());
         return GrizzlyHttpServerFactory.createHttpServer(BASE_URI, rc);
     }
-
     @BeforeAll
     public static void setUpClass() {
         //This method must be called before you request the EntityManagerFactory
@@ -142,4 +144,35 @@ public class PersonResourceTest {
                 .statusCode(HttpStatus.OK_200.getStatusCode())
                 .body("firstName", hasItems("ole", "krølle bølle"));
     }
+    @Test
+    public void testCreatePerson() throws Exception{
+        CityInfoEntity NicolaiBy = new CityInfoEntity("42069", "ROKKENTOWN");
+        AddressEntity johnAdresse = new AddressEntity("rema", NicolaiBy);
+        PersonEntity John = new PersonEntity("Køl", "hansen", "112", "email@", johnAdresse);
+        PersonDTO John1 = new PersonDTO(John);
+        given().
+                contentType("application/json").
+                body(John1)
+                .when()
+                .request("post", "/person").then()
+                .statusCode(HttpStatus.OK_200.getStatusCode());
+    }
+    @Test
+    public void testEditPerson() throws Exception{
+        CityInfoEntity NicolaiBy = new CityInfoEntity("42069", "ROKKENTOWN");
+        AddressEntity johnAdresse = new AddressEntity("rema 1000", NicolaiBy);
+        PersonEntity John = new PersonEntity("Jake", "der er hund", "yep", "email@", johnAdresse);
+        PersonDTO Jake = new PersonDTO(John);
+        given().
+                contentType("application/json").
+                pathParam("id", 2).
+                body(Jake)
+                .when()
+                .request("put", "/person/edit/{id}").then()
+                .statusCode(HttpStatus.OK_200.getStatusCode());
+    }
+
+    @Test public void testDeletePerson() throws Exception {given().contentType("application/json").pathParam("id", 2).when().request("delete", "/person/delete/{id}").then().statusCode(HttpStatus.OK_200.getStatusCode());}
+
+
 }
