@@ -9,7 +9,7 @@ import java.util.List;
 
 @Table(name = "person")
 @Entity
-@NamedQuery(name = "person.deleteAllRows", query = "DELETE from PersonEntity")
+@NamedQuery(name = "person.deleteAllRows", query = "DELETE from PersonEntity p")
 public class PersonEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

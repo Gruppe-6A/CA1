@@ -6,7 +6,7 @@ import java.util.List;
 
 @Table(name = "HOBBY")
 @Entity
-@NamedQuery(name = "HOBBY.deleteAllRows", query = "DELETE from HobbyEntity ")
+@NamedQuery(name = "HOBBY.deleteAllRows", query = "DELETE from HobbyEntity h")
 public class HobbyEntity {
     @Id
     @Column(name = "name", nullable = false)

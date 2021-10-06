@@ -5,6 +5,7 @@ import entities.*;
 import org.junit.jupiter.api.*;
 import utils.EMF_Creator;
 
+import javax.persistence.Entity;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
@@ -55,9 +56,9 @@ public class PersonFacadeTest {
 
             PersonEntity Camilla = new PersonEntity("krølle bølle", "ingen kvinder", "hvad skal den ellers have?", "thomas", camillasAdresse);
             PersonEntity ole = new PersonEntity("ole", "ole", "1-800-ole", "ole@ole.dk", camillasAdresse);
-
             Camilla.addHobby(beskæftigelse);
             ole.addHobby(beskæftigelse);
+
 
             em.persist(camillasCityInfo);
             em.persist(cbvci);
@@ -66,6 +67,7 @@ public class PersonFacadeTest {
             em.persist(camillasAdresse);
             em.persist(Camilla);
             em.persist(ole);
+
             em.getTransaction().commit();
         } finally {
             em.close();
@@ -74,11 +76,8 @@ public class PersonFacadeTest {
 
     @AfterEach
     public void tearDown() {
-      /*  EntityManager em = emf.createEntityManager();
-        em.getTransaction().begin();
-        em.createNativeQuery("truncate table person").executeUpdate();
 
-       */
+
     }
 
     // TODO: Delete or change this method 
@@ -88,8 +87,9 @@ public class PersonFacadeTest {
     }
     @Test
     public void testDelete() throws Exception{
-        facade.deletePerson(2);
-        assertEquals(1, facade.getAll().size());
+            facade.deletePerson(16);
+            assertEquals(1, facade.getAll().size());
+
     }
     @Test
     public void testCreatePerson() throws Exception{

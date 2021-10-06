@@ -6,7 +6,7 @@ import java.util.List;
 
 @Table(name = "cityinfo")
 @Entity
-@NamedQuery(name = "cityinfo.deleteAllRows", query = "DELETE from CityInfoEntity ")
+@NamedQuery(name = "cityinfo.deleteAllRows", query = "DELETE from CityInfoEntity c")
 public class CityInfoEntity {
     @Id
     @Column(name = "zipcode", nullable = false)
