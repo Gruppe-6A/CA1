@@ -63,12 +63,15 @@ public class CityInfoResourceTest {
 
     // Setup the DataBase (used by the test-server and this test) in a known state BEFORE EACH TEST
     //TODO -- Make sure to change the EntityClass used below to use YOUR OWN (renamed) Entity class
-    @BeforeAll
-    public static void setUp() {
+    @BeforeEach
+    public  void setUp() {
         EntityManager em = emf.createEntityManager();
         try{
         em.getTransaction().begin();
-
+            em.createNamedQuery("person.deleteAllRows").executeUpdate();
+            em.createNamedQuery("address.deleteAllRows").executeUpdate();
+            em.createNamedQuery("cityinfo.deleteAllRows").executeUpdate();
+            em.createNamedQuery("HOBBY.deleteAllRows").executeUpdate();
         CityInfoEntity camillasCityInfo = new CityInfoEntity("800", "Larsby");
         CityInfoEntity cbvci = new CityInfoEntity("820", "camillaby");
         CityInfoEntity ckb = new CityInfoEntity("1337", "gamertown");
