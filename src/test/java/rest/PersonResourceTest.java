@@ -165,14 +165,14 @@ public class PersonResourceTest {
         PersonDTO Jake = new PersonDTO(John);
         given().
                 contentType("application/json").
-                pathParam("id", 27).
+                pathParam("id", 99).
                 body(Jake)
                 .when()
                 .request("put", "/person/edit/{id}").then()
-                .statusCode(HttpStatus.OK_200.getStatusCode());
+                .statusCode(404);
     }
 
-    @Test public void testDeletePerson() throws Exception {given().contentType("application/json").pathParam("id", 23).when().request("delete", "/person/delete/{id}").then().statusCode(HttpStatus.OK_200.getStatusCode());}
+    @Test public void testDeletePerson() throws Exception {given().contentType("application/json").pathParam("id", 99).when().request("delete", "/person/delete/{id}").then().statusCode(404);}
 
 
 }
