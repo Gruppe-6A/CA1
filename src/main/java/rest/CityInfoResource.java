@@ -3,6 +3,7 @@ package rest;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import dtos.CityInfoDTO;
+import errorhandling.EntityNotFoundException;
 import facades.CityInfoFacade;
 import facades.FacadeExample;
 import utils.EMF_Creator;
@@ -33,7 +34,7 @@ public class CityInfoResource {
     @GET
     @Path("zip/{zipcode}")
     @Produces("application/json")
-    public String getByZip(@PathParam("zipcode") String zipcode){
+    public String getByZip(@PathParam("zipcode") String zipcode)throws EntityNotFoundException {
         CityInfoDTO ci = FACADE.getDTOByID(zipcode);
         return GSON.toJson(ci);
     }

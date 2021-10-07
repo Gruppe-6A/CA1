@@ -15,7 +15,7 @@
                 <th scope="col">URL</th>
                 <th scope="col">Request Body (JSON)</th>
                 <th scope="col">Response (JSON)</th>
-                <th scope="col">Error (e1)</th>
+                <th scope="col">Error</th>
             </tr>
             </thead>
             <tbody>
@@ -33,6 +33,33 @@
             </tr>
             <tr>
                 <th scope="row">GET</th>
+                <td colspan = "2">/api/person/all</td>
+                <td>[person, person, ..] (1)</td>
+                <td>error (e1)</td>
+            </tr>
+            <tr>
+                <th scope="row">POST</th>
+                <td>/api/person</td>
+                <td>person (1)</td>
+                <td>person (1)</td>
+                <td>error (e1), (e2)</td>
+            </tr>
+            <tr>
+                <th scope="row">PUT</th>
+                <td>api/person/edit/{id}</td>
+                <td>person (1)</td>
+                <td>person (1)</td>
+                <td>error (e1), (e2), (e3)</td>
+            </tr>
+            <tr>
+                <th scope="row">DELETE</th>
+                <td>/api/person/delete/{id}</td>
+                <td>{id}</td>
+                <td>String: "person with id " + id + " has been deleted"</td>
+                <td>error (e1), (e3)</td>
+            </tr>
+            <tr>
+                <th scope="row">GET</th>
                 <td colspan = "2">/api/cityinfo/zip/{zipcode}</td>
                 <td>cityInfo (2)</td>
                 <td>error (e1)</td>
@@ -43,6 +70,7 @@
                 <td>[cityInfo, cityInfo, ..] (2)</td>
                 <td>error (e1)</td>
             </tr>
+
             </tbody>
 
         </table>
@@ -74,10 +102,21 @@
   "zipcode": String,
   "city": String
 }
+(e) all errors are reported using this format (with the http statuscode matching the number)
 (e1)
 {
   "code": 500,
   "message": "Internal Server Error"
+}
+(e2)
+{
+  "code: 400"
+  "message": "Invalid input"
+}
+(e3)
+{
+  "code": 404
+  "message": "could not find {entity} with that {input}"
 }
         </pre>
     <img src = "CA1-Class-Diagram.drawio.svg" alt ="tegning">

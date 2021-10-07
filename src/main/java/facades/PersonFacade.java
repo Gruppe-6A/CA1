@@ -2,15 +2,18 @@ package facades;
 
 import dtos.*;
 import entities.*;
+import errorhandling.EntityNotFoundException;
 import errorhandling.InvalidInputException;
 import utils.EMF_Creator;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.TypedQuery;
+import javax.persistence.*;
 import javax.ws.rs.WebApplicationException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+
 
 /**
  *
@@ -54,11 +57,15 @@ public class PersonFacade {
         PersonEntity pe = new PersonEntity(p.getFirstName(), p.getLastName(), p.getPhoneNumber(), p.getEmailAddress(), ae);
 
 
-       // p.getHobbyDTO().forEach(hobby -> pe.addHobby(hobbyFacade.getHobbyByName(hobby.getName()));
+
         try {
+        Pattern pa = Pattern.compile("[a-zA-Z]");
+        Matcher m = pa.matcher(p.getPhoneNumber());
             if (!p.getEmailAddress().contains("@")){
             throw new InvalidInputException("invalid email address");
-        }
+        } else if(m.find()){
+                throw new InvalidInputException("invalid phone number");
+            }
             em.getTransaction().begin();
 
             em.persist(pe);
@@ -72,25 +79,25 @@ public class PersonFacade {
         }
 
             catch (InvalidInputException l){
-            throw new WebApplicationException(l.getMessage(), 404);
+            throw new WebApplicationException(l.getMessage(), 400);
 
         } finally {
             em.close();
         }
         return new PersonDTO(pe);
     }
-    public List<PersonDTO> getAllByHobby(String name){
+    public List<PersonDTO> getAllByHobby(String name) {
         EntityManager em = emf.createEntityManager();
         try{
             TypedQuery query = em.createQuery("Select p from HobbyEntity h JOIN h.pList p Where h.name = :name", PersonEntity.class);
             query.setParameter("name", name);
             List<PersonEntity> pe = query.getResultList();
             return PersonDTO.getPersonDTO(pe);
-        } finally {
+        }  finally{
             em.close();
         }
     }
-    public PersonDTO getByPhone(String phoneNumber){
+    public PersonDTO getByPhone(String phoneNumber) {
         EntityManager em = emf.createEntityManager();
         try{
             TypedQuery query = em.createQuery("Select p from PersonEntity p where p.phoneNumber = :phonenumber", PersonEntity.class);
@@ -113,41 +120,66 @@ public class PersonFacade {
             em.close();
         }
     }
-    public PersonDTO editPerson(PersonDTO p){
+    public PersonDTO editPerson(PersonDTO p) throws InvalidInputException, EntityNotFoundException {
         EntityManager em = getEntityManager();
+        PersonEntity person = em.find(PersonEntity.class, p.getID());
         try {
+            Pattern pa = Pattern.compile("[a-zA-Z]");
+            Matcher m = pa.matcher(p.getPhoneNumber());
+            if (!p.getEmailAddress().contains("@")){
+                throw new InvalidInputException("invalid email address");
+            }else if(m.find()){
+                throw new InvalidInputException("invalid phone number");
+            }
+            if(person == null){
+                throw new EntityNotFoundException("Could not find anyone with that id");
+            }
+
             em.getTransaction().begin();
-            PersonEntity person = em.find(PersonEntity.class, p.getID());
+
             person.setFirstName(p.getFirstName());
             person.setLastName(p.getLastName());
             person.setEmailAddress(p.getEmailAddress());
             person.setPhoneNumber(p.getPhoneNumber());
-            /*person.getAddress().getCityInfo().setZipcode(p.getAddressDTO().getCityInfoDTO().getZipcode());
-            person.getAddress().setAddress(p.getAddressDTO().getAddress());
-            person.getAddress().getCityInfo().setCity(p.getAddressDTO().getCityInfoDTO().getCity());
 
-             */
             CityInfoEntity ci = ci1.getEntityByID(p.getAddressDTO().getCityInfoDTO().getZipcode());
             person.setAddress(new AddressEntity(p.getAddressDTO().getAddress(), ci));
             em.getTransaction().commit();
             return new PersonDTO(person);
-        } finally{
-            em.close();
-        }
-    }
-    public void deletePerson(int id){
-        EntityManager em = getEntityManager();
-        try{
-            em.getTransaction().begin();
-            TypedQuery query = em.createQuery("DELETE from PersonEntity p where p.id = :id", PersonEntity.class);
-            query.setParameter("id", id);
-            query.executeUpdate();
-            em.getTransaction().commit();
-        } finally{
-            em.close();
         }
 
+        catch (InvalidInputException l){
+            throw new WebApplicationException(l.getMessage(), 400);
+
+        } catch(EntityNotFoundException oo){
+            throw new WebApplicationException(oo.getMessage(), 404);
+        } finally{
+            em.close();
+        }
     }
+    public PersonDTO deletePerson(int id)throws EntityNotFoundException{
+        EntityManager em = getEntityManager();
+        PersonEntity person = em.find(PersonEntity.class, id);
+            try {
+                if (person == null){
+                throw new EntityNotFoundException("Could not find anyone with that id");
+            }
+                em.getTransaction().begin();
+                em.remove(person);
+                em.getTransaction().commit();
+
+            } catch(EntityNotFoundException oo){
+                throw new WebApplicationException(oo.getMessage(), 404);
+            }
+            finally{
+                em.close();
+            }
+            return new PersonDTO (person);
+        }
+         /*catch(NoResultException nre){
+        throw new WebApplicationException("Could not find anyone with that id", 404);
+    }*/
+
 
     
     public static void main(String[] args) {

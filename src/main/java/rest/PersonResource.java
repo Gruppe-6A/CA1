@@ -3,11 +3,13 @@ package rest;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import dtos.PersonDTO;
+import errorhandling.EntityNotFoundException;
 import errorhandling.InvalidInputException;
 import facades.FacadeExample;
 import facades.PersonFacade;
 import utils.EMF_Creator;
 
+import javax.persistence.Entity;
 import javax.persistence.EntityManagerFactory;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -38,7 +40,7 @@ public class PersonResource {
     @Path("hobby/{hobby}")
     @GET
     @Produces("application/json")
-    public String getByHobby(@PathParam("hobby") String hobby){
+    public String getByHobby(@PathParam("hobby") String hobby)  {
         List<PersonDTO> pdtoList = FACADE.getAllByHobby(hobby);
         return GSON.toJson(pdtoList);
     }
@@ -68,7 +70,7 @@ public class PersonResource {
     @PUT
     @Consumes("application/json")
     @Produces("application/json")
-    public String editPerson(@PathParam("id")int id, String person){
+    public String editPerson(@PathParam("id")int id, String person)throws InvalidInputException, EntityNotFoundException{
       PersonDTO dto =  GSON.fromJson(person, PersonDTO.class);
         dto.setID(id);
         return GSON.toJson(FACADE.editPerson(dto));
@@ -76,10 +78,11 @@ public class PersonResource {
     @Path("delete/{id}")
     @DELETE
     @Consumes("application/json")
-    public String deletePerson(@PathParam("id") int id, String person){
+    @Produces("application/json")
+    public String deletePerson(@PathParam("id") int id, String person) throws EntityNotFoundException {
 
-       FACADE.deletePerson(id);
-       return GSON.toJson("person with id: " + id + " has now been deleted.");
+       PersonDTO pDTO = FACADE.deletePerson(id);
+       return GSON.toJson(pDTO);
     }
 
     }
