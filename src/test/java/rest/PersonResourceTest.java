@@ -82,8 +82,8 @@ public class PersonResourceTest {
             CityInfoEntity NicolaiBy = new CityInfoEntity("42069", "ROKKENTOWN");
             AddressEntity camillasAdresse = new AddressEntity("Skrrtvej 8199999", camillasCityInfo);
 
-            PersonEntity Camilla = new PersonEntity("krølle bølle", "ingen kvinder", "hvad skal den ellers have?", "thomas", camillasAdresse);
-            PersonEntity ole = new PersonEntity("ole", "ole", "1-800-ole", "ole@ole.dk", camillasAdresse);
+            PersonEntity Camilla = new PersonEntity("krølle bølle", "ingen kvinder", "123", "thomas", camillasAdresse);
+            PersonEntity ole = new PersonEntity("ole", "ole", "1-800-123", "ole@ole.dk", camillasAdresse);
 
             Camilla.addHobby(beskæftigelse);
             ole.addHobby(beskæftigelse);
@@ -125,7 +125,7 @@ public class PersonResourceTest {
     public void testGetByPhone() throws Exception {
         given()
                 .contentType("application/json")
-                .pathParam("phone", "1-800-ole").when()
+                .pathParam("phone", "1-800-123").when()
                 .get("/person/phone/{phone}").then()
                 .assertThat()
                 .statusCode(HttpStatus.OK_200.getStatusCode())
@@ -161,18 +161,18 @@ public class PersonResourceTest {
     public void testEditPerson() throws Exception{
         CityInfoEntity NicolaiBy = new CityInfoEntity("42069", "ROKKENTOWN");
         AddressEntity johnAdresse = new AddressEntity("rema 1000", NicolaiBy);
-        PersonEntity John = new PersonEntity("Jake", "der er hund", "yep", "email@", johnAdresse);
+        PersonEntity John = new PersonEntity("Jake", "der er hund", "132", "email@", johnAdresse);
         PersonDTO Jake = new PersonDTO(John);
         given().
                 contentType("application/json").
-                pathParam("id", 28).
+                pathParam("id", 27).
                 body(Jake)
                 .when()
                 .request("put", "/person/edit/{id}").then()
                 .statusCode(HttpStatus.OK_200.getStatusCode());
     }
 
-    @Test public void testDeletePerson() throws Exception {given().contentType("application/json").pathParam("id", 2).when().request("delete", "/person/delete/{id}").then().statusCode(HttpStatus.OK_200.getStatusCode());}
+    @Test public void testDeletePerson() throws Exception {given().contentType("application/json").pathParam("id", 23).when().request("delete", "/person/delete/{id}").then().statusCode(HttpStatus.OK_200.getStatusCode());}
 
 
 }

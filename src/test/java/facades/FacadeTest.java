@@ -54,8 +54,8 @@ public class FacadeTest {
             CityInfoEntity NicolaiBy = new CityInfoEntity("42069", "ROKKENTOWN");
             AddressEntity camillasAdresse = new AddressEntity("Skrrtvej 8199999", camillasCityInfo);
 
-            PersonEntity Camilla = new PersonEntity("krølle bølle", "ingen kvinder", "hvad skal den ellers have?", "thomas", camillasAdresse);
-            PersonEntity ole = new PersonEntity("ole", "ole", "1-800-ole", "ole@ole.dk", camillasAdresse);
+            PersonEntity Camilla = new PersonEntity("krølle bølle", "ingen kvinder", "123", "thomas", camillasAdresse);
+            PersonEntity ole = new PersonEntity("ole", "ole", "1-800-123", "ole@ole.dk", camillasAdresse);
             Camilla.addHobby(beskæftigelse);
             ole.addHobby(beskæftigelse);
 
@@ -83,7 +83,7 @@ public class FacadeTest {
     // TODO: Delete or change this method 
     @Test
     public void testAFacadeMethod() throws Exception {
-        assertEquals("krølle bølle", facade.getByPhone("hvad skal den ellers have?").getFirstName());
+        assertEquals("krølle bølle", facade.getByPhone("123").getFirstName());
     }
     @Test
     public void testDelete() throws Exception{
