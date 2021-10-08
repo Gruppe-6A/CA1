@@ -30,6 +30,7 @@ public class PersonDTO {
         this.emailAddress = pe.getEmailAddress();
         this.hobbyDTO = HobbyDTO.getDtos(pe.getHobby());
         this.addressDTO = new AddressDTO(pe.getAddress());
+        this.ID = pe.getId();
 
     }
     public static List<PersonDTO> getPersonDTO(List<PersonEntity> pe){
