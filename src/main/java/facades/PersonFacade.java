@@ -157,6 +157,21 @@ public class PersonFacade {
             em.close();
         }
     }
+    public PersonDTO getById(int id) throws EntityNotFoundException {
+        EntityManager em = getEntityManager();
+        PersonEntity person = em.find(PersonEntity.class, id);
+        try {
+            if (person == null) {
+                throw new EntityNotFoundException("Could not find anyone with that id");
+            }
+
+        } catch (EntityNotFoundException oo) {
+            throw new WebApplicationException(oo.getMessage(), 404);
+        } finally {
+            em.close();
+        }
+        return new PersonDTO (person);
+    }
     public PersonDTO deletePerson(int id)throws EntityNotFoundException{
         EntityManager em = getEntityManager();
         PersonEntity person = em.find(PersonEntity.class, id);

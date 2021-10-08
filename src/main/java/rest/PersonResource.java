@@ -23,12 +23,7 @@ public class PersonResource {
        
     private static final PersonFacade FACADE =  PersonFacade.getPersonFacade(EMF);
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
-            
-    @GET
-    @Produces({MediaType.APPLICATION_JSON})
-    public String demo() {
-        return "{\"msg\":\"Hello World\"}";
-    }
+
 
     @Path("phone/{phone}")
     @GET
@@ -65,6 +60,12 @@ public class PersonResource {
 
 
         return GSON.toJson(newpdto);
+    }
+    @Path("{id}")
+    @GET
+    @Produces("application/json")
+    public String getById(@PathParam("id")int id) throws EntityNotFoundException {
+        return GSON.toJson(FACADE.getById(id));
     }
     @Path("edit/{id}")
     @PUT
