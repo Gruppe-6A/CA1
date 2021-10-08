@@ -98,7 +98,9 @@ public class FacadeTest {
         CityInfoEntity NicolaiBy = new CityInfoEntity("42069", "ROKKENTOWN");
         AddressEntity johnAdresse = new AddressEntity("rema", NicolaiBy);
         PersonEntity John = new PersonEntity("Køl", "hansen", "112", "email@", johnAdresse);
+        John.setId(14);
         PersonDTO John1 = new PersonDTO(John);
+
         assertEquals("hansen", facade.createPerson(John1).getLastName());
     }
     @Test

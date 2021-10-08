@@ -149,6 +149,7 @@ public class PersonResourceTest {
         CityInfoEntity NicolaiBy = new CityInfoEntity("42069", "ROKKENTOWN");
         AddressEntity johnAdresse = new AddressEntity("rema", NicolaiBy);
         PersonEntity John = new PersonEntity("Køl", "hansen", "112", "email@", johnAdresse);
+        John.setId(100);
         PersonDTO John1 = new PersonDTO(John);
         given().
                 contentType("application/json").
@@ -162,6 +163,7 @@ public class PersonResourceTest {
         CityInfoEntity NicolaiBy = new CityInfoEntity("42069", "ROKKENTOWN");
         AddressEntity johnAdresse = new AddressEntity("rema 1000", NicolaiBy);
         PersonEntity John = new PersonEntity("Jake", "der er hund", "132", "email@", johnAdresse);
+        John.setId(99);
         PersonDTO Jake = new PersonDTO(John);
         given().
                 contentType("application/json").

@@ -31,8 +31,10 @@ public class PersonDTO {
         this.hobbyDTO = HobbyDTO.getDtos(pe.getHobby());
         this.addressDTO = new AddressDTO(pe.getAddress());
         this.ID = pe.getId();
-
     }
+
+
+
     public static List<PersonDTO> getPersonDTO(List<PersonEntity> pe){
         List<PersonDTO> pDTO = new ArrayList();
         pe.forEach(pes->pDTO.add(new PersonDTO(pes)));
