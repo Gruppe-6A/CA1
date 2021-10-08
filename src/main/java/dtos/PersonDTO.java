@@ -34,7 +34,7 @@ public class PersonDTO {
     }
 
 
-
+    public PersonDTO(){}
     public static List<PersonDTO> getPersonDTO(List<PersonEntity> pe){
         List<PersonDTO> pDTO = new ArrayList();
         pe.forEach(pes->pDTO.add(new PersonDTO(pes)));
